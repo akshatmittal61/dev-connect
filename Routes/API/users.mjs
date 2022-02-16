@@ -2,8 +2,8 @@ import express from "express";
 import { check, validationResult } from "express-validator";
 import User from "../../Models/User.mjs";
 import gravatar from "gravatar";
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const router = express.Router();
 
 router.post(
@@ -22,26 +22,33 @@ router.post(
 		const { name, email, password } = req.body;
 		try {
 			let user = await User.findOne({ email });
-			if(user){
-				return res.status(400).json({errors: [{message: 'User already registered'}]})
+			if (user) {
+				return res
+					.status(400)
+					.json({ errors: [{ message: "User already registered" }] });
 			}
-			const avatar=gravatar.url(email,{
+			const avatar = gravatar.url(email, {
 				s: 200,
-				r: 'pg',
-				d: 'mm'
-			})
-			user=new User({name,email,avatar,password})
-			user.password=await bcrypt.hash(password,10)
-			await user.save()
-			const payload={
-				user:{
-					id: user.id
+				r: "pg",
+				d: "mm",
+			});
+			user = new User({ name, email, avatar, password });
+			user.password = await bcrypt.hash(password, 10);
+			await user.save();
+			const payload = {
+				user: {
+					id: user.id,
+				},
+			};
+			jwt.sign(
+				payload,
+				process.env.JWT_SECRET,
+				{ expiresIn: 360000 },
+				(err, token) => {
+					if (err) throw err;
+					res.json({ token });
 				}
-			}
-			jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: 360000},(err,token)=>{
-				if(err)throw err;
-				res.json({token})
-			})
+			);
 		} catch (err) {
 			console.error(err);
 			res.status(500).send("Server error");
