@@ -21,6 +21,7 @@ connectDB();
 app.get("/", (req, res) => {
 	res.send("Hello world");
 });
+app.use(express.json({ extended: false }));
 
 app.use("/api/users", apiUsers);
 app.use("/api/auth", apiAuth);
