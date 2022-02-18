@@ -165,4 +165,19 @@ router.put(
 	}
 );
 
+router.delete("/experience/:exp_id", auth, async (req, res) => {
+	try {
+		const profile = await Profile.findOne({ user: req.user.id });
+		const remIndex = profile.experience
+			.map((a) => a.id)
+			.indexOf(req.params.exp_id);
+		profile.experience.splice(remIndex, 1);
+		await profile.save();
+		res.json(profile);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send("Server error");
+	}
+});
+
 export default router;
