@@ -2,6 +2,7 @@ import express from "express";
 import { check, validationResult } from "express-validator";
 import auth from "../../Middleware/auth.mjs";
 import Profile from "../../Models/Profile.mjs";
+import User from "../../Models/User.mjs";
 const router = express.Router();
 
 router.get("/me", auth, async (req, res) => {
@@ -112,6 +113,17 @@ router.get("/user/:user_id", async (req, res) => {
 		console.error(err);
 		if (err.kind === "ObjectId")
 			return res.status(400).json({ message: "Profile not found" });
+		res.status(500).send("Server error");
+	}
+});
+
+router.delete("/", auth, async (req, res) => {
+	try {
+		await Profile.findOneAndRemove({ user: req.user.id });
+		await User.findOneAndRemove({ _id: req.user.id });
+		res.json({ message: "User removed" });
+	} catch (err) {
+		console.error(err);
 		res.status(500).send("Server error");
 	}
 });
