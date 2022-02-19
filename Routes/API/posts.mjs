@@ -95,9 +95,9 @@ router.put("/unlike/:id", auth, async (req, res) => {
 			return res
 				.status(400)
 				.json({ message: "Post has not been yet liked" });
-		const remIndex = post.likes.map((like) =>
-			like.user.toString().indexOf(req.user.id)
-		);
+		const remIndex = post.likes
+			.map((like) => like.user.toString())
+			.indexOf(req.user.id);
 		post.likes.splice(remIndex, 1);
 		await post.save();
 		res.json(post.likes);
@@ -133,5 +133,28 @@ router.post(
 		}
 	}
 );
+
+router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
+	try {
+		const post = await Post.findById(req.params.id);
+		if (!post) return res.status(404).json({ message: "Post not found" });
+		const comment = post.comments.find(
+			(comment) => comment.id === req.params.comment_id
+		);
+		if (!comment)
+			return res.status(404).json({ message: "Comment does not exist" });
+		if (comment.user.toString() !== req.user.id)
+			return res.status(401).json({ message: "User not authorized" });
+		const remIndex = post.comments
+			.map((comment) => comment.user.toString())
+			.indexOf(req.user.id);
+		post.comments.splice(remIndex, 1);
+		await post.save();
+		res.json(post.comments);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send("Server error");
+	}
+});
 
 export default router;
