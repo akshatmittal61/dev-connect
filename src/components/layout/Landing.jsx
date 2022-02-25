@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
 	return (
@@ -12,14 +13,14 @@ const Landing = () => {
 					</p>
 					<div className="buttons">
 						<div className="button">
-							<a href="register.html" className="btn btn-primary">
+							<Link to="/register" className="btn btn-primary">
 								Register
-							</a>
+							</Link>
 						</div>
 						<div className="button">
-							<a href="login.html" className="btn btn-light">
+							<Link to="/login" className="btn btn-light">
 								Log In
-							</a>
+							</Link>
 						</div>
 					</div>
 				</div>
