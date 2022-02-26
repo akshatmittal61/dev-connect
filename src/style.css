@@ -515,10 +515,15 @@ img {
 	border-bottom: 1px solid #17a2b8;
 	opacity: 0.9;
 }
-.navbar ul {
+.navbar > * {
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
+}
+.navbar img {
+	object-fit: cover;
+	height: 2.5rem;
+	width: 2.5rem;
 }
 .navbar a {
 	color: #f0f0f0;
@@ -550,7 +555,7 @@ img {
 	text-align: center;
 }
 .landing .buttons {
-	width: 25%;
+	width: 30%;
 	margin: 2rem 0;
 	display: flex;
 	justify-content: center;
@@ -671,6 +676,9 @@ img {
 }
 
 @media (max-width: 700px) {
+	.landing .buttons {
+		width: 75%;
+	}
 	.hide-sm {
 		display: none;
 	}
