@@ -29,7 +29,7 @@ const Login = () => {
 				},
 			};
 			const body = JSON.stringify(newUser);
-			const res = await axios.post("/api/users", body, config);
+			const res = await axios.post(`${process.env.REACT_APP_PROXY}/api/users`, body, config);
 			console.log(res.data);
 		} catch (err) {
 			console.error(err.response.data);

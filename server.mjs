@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { config } from "dotenv";
+import cors from "cors";
 import apiUsers from "./Routes/API/users.mjs";
 import apiAuth from "./Routes/API/auth.mjs";
 import apiProfile from "./Routes/API/profile.mjs";
@@ -18,6 +19,7 @@ const connectDB = async () => {
 };
 connectDB();
 
+app.use(cors());
 app.get("/", (req, res) => {
 	res.send("Hello world");
 });
