@@ -10,11 +10,10 @@ export const register =
 				"Content-Type": "application/json",
 			},
 		};
-		const body = { name, email, password };
-		console.log(body);
+		const body = JSON.stringify({ name, email, password });
 		try {
 			const res = await axios.post(
-				`http://localhost:5000/api/users/`,
+				"http://localhost:5000/api/users/",
 				body,
 				config
 			);
@@ -23,7 +22,6 @@ export const register =
 				payload: res.data,
 			});
 		} catch (err) {
-			console.log(err);
 			const errors = err.response.data.errors;
 			if (errors) {
 				errors.forEach((error) =>

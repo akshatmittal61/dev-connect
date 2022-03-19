@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { setAlert } from "../../actions/alert";
@@ -23,7 +22,7 @@ const Register = ({ setAlert, register }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const { name, email, password, password2 } = formData;
-		if (formData.password !== formData.password2) {
+		if (password !== password2) {
 			setAlert("Passwords do not match", "danger");
 		} else {
 			register({ name, email, password });
@@ -35,13 +34,6 @@ const Register = ({ setAlert, register }) => {
 			password2: "",
 		});
 	};
-	useEffect(() => {
-		const fet = async () => {
-			const res = await axios(`${process.env.REACT_APP_PROXY}/api/profile`);
-			console.log(res.data);
-		};
-		fet();
-	}, []);
 
 	return (
 		<>

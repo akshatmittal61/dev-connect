@@ -19,7 +19,7 @@ const connectDB = async () => {
 };
 connectDB();
 
-app.use(cors());
+app.use(cors('*'));
 app.get("/", (req, res) => {
 	res.send("Hello world");
 });
