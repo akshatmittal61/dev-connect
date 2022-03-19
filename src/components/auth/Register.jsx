@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setAlert } from "../../actions/alert";
 import { register } from "../../actions/auth";
 import PropTypes from "prop-types";
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
@@ -34,7 +35,11 @@ const Register = ({ setAlert, register }) => {
 			password2: "",
 		});
 	};
-
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate("/dashboard");
+		}
+	}, []);
 	return (
 		<>
 			<h1 className="large text-primary">Sign Up</h1>
@@ -51,7 +56,7 @@ const Register = ({ setAlert, register }) => {
 						placeholder="Name"
 						value={formData.name}
 						onChange={handleChange}
-						// required
+						required
 					/>
 				</div>
 				<div className="form-group">
@@ -62,7 +67,7 @@ const Register = ({ setAlert, register }) => {
 						placeholder="Email Address"
 						value={formData.email}
 						onChange={handleChange}
-						// required
+						required
 					/>
 					<small className="form-text">
 						This site uses gravatar, so if you want a image use a
@@ -74,11 +79,11 @@ const Register = ({ setAlert, register }) => {
 						type="password"
 						name="password"
 						id="password"
-						// minLength="6"
+						minLength="6"
 						placeholder="Password"
 						value={formData.password}
 						onChange={handleChange}
-						// required
+						required
 					/>
 				</div>
 				<div className="form-group">
@@ -86,11 +91,11 @@ const Register = ({ setAlert, register }) => {
 						type="password"
 						name="password2"
 						id="password2"
-						// minLength="6"
+						minLength="6"
 						placeholder="Confirm Password"
 						value={formData.password2}
 						onChange={handleChange}
-						// required
+						required
 					/>
 				</div>
 				<button type="submit" className="btn btn-primary">
@@ -108,6 +113,11 @@ const Register = ({ setAlert, register }) => {
 Register.propTypes = {
 	setAlert: PropTypes.func.isRequired,
 	register: PropTypes.func.isRequired,
+	isAuthenticated: PropTypes.bool,
 };
 
-export default connect(null, { setAlert, register })(Register);
+const mapStateToProps = (state) => ({
+	isAuthenticated: state.authentication.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { setAlert, register })(Register);

@@ -1,8 +1,11 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { login } from "../../actions/auth";
 
-const Login = () => {
+const Login = ({ login, isAuthenticated }) => {
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -14,33 +17,16 @@ const Login = () => {
 			[name]: value,
 		});
 	};
+	const { email, password } = formData;
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(formData);
-		const newUser = {
-			name: formData.name,
-			email: formData.email,
-			password: formData.password,
-		};
-		try {
-			const config = {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			};
-			const body = JSON.stringify(newUser);
-			const res = await axios.post(`${process.env.REACT_APP_PROXY}/api/users`, body, config);
-			console.log(res.data);
-		} catch (err) {
-			console.error(err.response.data);
-		}
-		setFormData({
-			name: "",
-			email: "",
-			password: "",
-			password2: "",
-		});
+		login(email, password);
 	};
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate("/dashboard");
+		}
+	}, []);
 	return (
 		<>
 			<h1 className="large text-primary">Sign In</h1>
@@ -76,7 +62,7 @@ const Login = () => {
 					Login
 				</button>
 			</form>
-			<p class="my-1">
+			<p className="my-1">
 				Don't have an account?
 				<Link to="/register">Sign Up</Link>
 			</p>
@@ -84,4 +70,13 @@ const Login = () => {
 	);
 };
 
-export default Login;
+Login.propTypes = {
+	login: PropTypes.func.isRequired,
+	isAuthenticated: PropTypes.bool,
+};
+
+const mapStateToProps = (state) => ({
+	isAuthenticated: state.authentication.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(Login);
