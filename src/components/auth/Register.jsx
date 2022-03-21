@@ -39,7 +39,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 		if (isAuthenticated) {
 			navigate("/dashboard");
 		}
-	}, []);
+	}, [isAuthenticated, navigate]);
 	return (
 		<>
 			<h1 className="large text-primary">Sign Up</h1>

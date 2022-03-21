@@ -26,7 +26,7 @@ const Login = ({ login, isAuthenticated }) => {
 		if (isAuthenticated) {
 			navigate("/dashboard");
 		}
-	}, []);
+	}, [isAuthenticated, navigate]);
 	return (
 		<>
 			<h1 className="large text-primary">Sign In</h1>

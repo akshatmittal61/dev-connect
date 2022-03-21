@@ -7,6 +7,8 @@ import Register from "./components/auth/Register";
 import Alert from "./components/layout/Alert";
 import { loadUser } from "./actions/auth";
 import store from "./store.js";
+import Dashboard from "./components/Dashboard/Dashboard";
+import PrivateRoute from "./components/Routing/PrivateRoute";
 
 const App = () => {
 	const location = useLocation();
@@ -23,6 +25,16 @@ const App = () => {
 					<Routes>
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
+						<>
+							<Route
+								path="/dashboard"
+								element={
+									<PrivateRoute>
+										<Dashboard />
+									</PrivateRoute>
+								}
+							/>
+						</>
 					</Routes>
 				</section>
 			) : (
